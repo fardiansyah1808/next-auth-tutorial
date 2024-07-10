@@ -14,7 +14,7 @@ export const sendVerificationEmail = async (
   email: string,
   token: string
 ) => {
-  const confirmationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/confirm-email?token=${token}`;
+  const confirmationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm-email?token=${token}&email=${email}`;
   const recipients = [new Recipient(email, name)];
   const emailParams = new EmailParams()
     .setFrom(sentFrom)
@@ -63,6 +63,9 @@ export const sendVerificationEmail = async (
           color: #fff;
           text-decoration: none;
           border-radius: 5px;
+        }
+        .button:visited {
+          color: #fff;
         }
         .footer {
           background-color: #f4f4f4;

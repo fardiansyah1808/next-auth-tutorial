@@ -21,14 +21,14 @@ export default auth((req) => {
     return;
   }
 
+  if (isOnPublicRoute) {
+    return;
+  }
+
   if (isOnAuthRoute) {
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_REDIRECT_PATH, nextUrl));
     }
-    return;
-  }
-
-  if (isOnPublicRoute) {
     return;
   }
 

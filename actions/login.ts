@@ -8,6 +8,7 @@ import { AuthError } from "next-auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail } from "@/lib/mail";
+import bcrypt from "bcryptjs";
 
 export const login = async (formData: z.infer<typeof LoginSchema>) => {
   const validatedField = LoginSchema.safeParse(formData);
@@ -22,10 +23,15 @@ export const login = async (formData: z.infer<typeof LoginSchema>) => {
   if (
     !existingUser ||
     !existingUser.email ||
-    !existingUser.password ||
-    !existingUser.name
+    !existingUser.name ||
+    !existingUser.password
   ) {
     return { error: "User does not exist" };
+  }
+
+  const passwordMatch = await bcrypt.compare(password, existingUser.password);
+  if (!passwordMatch) {
+    return { error: "Invalid credentials" };
   }
 
   if (!existingUser.emailVerified) {
@@ -39,7 +45,7 @@ export const login = async (formData: z.infer<typeof LoginSchema>) => {
       verificationToken.token
     );
     return {
-      success: "Please verify your email by clicking the link in the email",
+      error: "Please verify your email by clicking the link in the email",
     };
   }
 
@@ -49,12 +55,15 @@ export const login = async (formData: z.infer<typeof LoginSchema>) => {
       password,
       redirectTo: DEFAULT_REDIRECT_PATH,
     });
+
     return { success: "Login successful" };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
           return { error: "Invalid credentials" };
+        case "AccessDenied":
+          return { error: "Access denied. Please check your credentials." };
         default:
           return { error: "Something went wrong" };
       }

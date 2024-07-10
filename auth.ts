@@ -11,10 +11,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "jwt",
   },
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account }) {
+      // console.log({ user, account });
       if (!user.id) return false;
+
       const existingUser = await getUserById(user.id);
-      if (!existingUser || !existingUser.emailVerified) return false;
+      if (!existingUser?.emailVerified) return false;
+
       return true;
     },
     async session({ session, token }) {
