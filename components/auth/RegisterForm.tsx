@@ -20,10 +20,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
 import { register } from "@/actions/register";
+import { Label } from "@/components/ui/label";
 
 const RegisterForm = () => {
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof RegisterSchema>>({
@@ -45,8 +46,8 @@ const RegisterForm = () => {
     setSuccess("");
     startTransition(() => {
       register(data).then((value) => {
-        setError(value.error || null);
-        setSuccess(value.success || null);
+        setError(value.error || "");
+        setSuccess(value.success || "");
       });
     });
     form.reset();
@@ -57,7 +58,7 @@ const RegisterForm = () => {
       headerLabel="Create your account"
       backButtonLabel="Already have an account?"
       backButtonHref="/auth/login"
-      showSocial
+      // showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -137,12 +138,12 @@ const RegisterForm = () => {
                       defaultChecked={showPassword}
                       disabled={isPending}
                     />
-                    <label
+                    <Label
                       htmlFor="show-password"
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Show Password
-                    </label>
+                    </Label>
                   </div>
                 </FormItem>
               )}

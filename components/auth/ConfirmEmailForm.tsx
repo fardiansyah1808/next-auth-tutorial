@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { PropagateLoader } from "react-spinners";
-import CardWrapper from "./CardWrapper";
+import CardWrapper from "@/components/auth/CardWrapper";
 import { useSearchParams } from "next/navigation";
 import { confirmEmail } from "@/actions/confirm-email";
 import FormError from "@/components/FormError";

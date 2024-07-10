@@ -20,10 +20,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import FormError from "@/components/FormError";
 import FormSuccess from "@/components/FormSuccess";
 import { login } from "@/actions/login";
+import { Label } from "@/components/ui/label";
 
 const LoginForm = () => {
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -39,12 +40,10 @@ const LoginForm = () => {
   };
 
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-    setError("");
-    setSuccess("");
     startTransition(() => {
       login(data).then((value) => {
-        setError(value?.error || null);
-        setSuccess(value?.success || null);
+        setError(value?.error || "");
+        setSuccess(value?.success || "");
       });
     });
   };
@@ -54,7 +53,7 @@ const LoginForm = () => {
       headerLabel="Welcome Back!"
       backButtonLabel="Don't have an account?"
       backButtonHref="/auth/register"
-      showSocial
+      // showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -98,12 +97,12 @@ const LoginForm = () => {
                       defaultChecked={showPassword}
                       disabled={isPending}
                     />
-                    <label
+                    <Label
                       htmlFor="show-password"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-violet-500"
                     >
                       Show Password
-                    </label>
+                    </Label>
                   </div>
                 </FormItem>
               )}
