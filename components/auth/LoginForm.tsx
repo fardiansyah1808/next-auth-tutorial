@@ -43,8 +43,8 @@ const LoginForm = () => {
     setSuccess("");
     startTransition(() => {
       login(data).then((value) => {
-        setError(value.error || null);
-        setSuccess(value.success || null);
+        setError(value?.error || null);
+        setSuccess(value?.success || null);
       });
     });
   };

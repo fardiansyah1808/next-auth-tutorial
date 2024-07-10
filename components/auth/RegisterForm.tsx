@@ -49,6 +49,7 @@ const RegisterForm = () => {
         setSuccess(value.success || null);
       });
     });
+    form.reset();
   };
 
   return (
