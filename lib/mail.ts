@@ -80,6 +80,7 @@ export const sendVerificationEmail = async (
       <div class="container">
         <div class="content">
           <h1>Email Verification</h1>
+          <h4>Hello ${name},</h4>
           <p>Verify this email address for your account by clicking the link below.</p>
           <p>If you did not request to verify an account, you can safely ignore this email.</p>
           <a href="${confirmationUrl}" class="button">Verify Email Address Now</a>

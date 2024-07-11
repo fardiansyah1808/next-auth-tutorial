@@ -9,6 +9,8 @@ import { generateVerificationToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail } from "@/lib/mail";
 import bcrypt from "bcryptjs";
+import { getVerificationTokenByEmail } from "@/data/verificationToken";
+import { error } from "console";
 
 export const login = async (formData: z.infer<typeof LoginSchema>) => {
   const validatedField = LoginSchema.safeParse(formData);
@@ -35,18 +37,29 @@ export const login = async (formData: z.infer<typeof LoginSchema>) => {
   }
 
   if (!existingUser.emailVerified) {
-    const verificationToken = await generateVerificationToken(
+    const existingVerificationToken = await getVerificationTokenByEmail(
       existingUser.email
     );
-
-    await sendVerificationEmail(
-      existingUser.name,
-      existingUser.email,
-      verificationToken.token
-    );
-    return {
-      error: "Please verify your email by clicking the link in the email",
-    };
+    if (
+      !existingVerificationToken ||
+      existingVerificationToken.expires < new Date()
+    ) {
+      const verificationToken = await generateVerificationToken(
+        existingUser.email
+      );
+      await sendVerificationEmail(
+        existingUser.name,
+        existingUser.email,
+        verificationToken.token
+      );
+      return {
+        success: "Verification email sent",
+      };
+    } else {
+      return {
+        error: "Please verify your email by clicking the link in the email",
+      };
+    }
   }
 
   try {
