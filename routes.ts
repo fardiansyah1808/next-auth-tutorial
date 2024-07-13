@@ -10,7 +10,13 @@ export const publicRoutes = ["/", "/auth/confirm-email"];
  * this routes about authentication
  * @type {string[]}
  */
-export const authRoutes = ["/auth/login", "/auth/register"];
+export const authRoutes = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/reset-password",
+  "/auth/new-password",
+  "/auth/error",
+];
 
 /**
  * The prefix of the authentication routes

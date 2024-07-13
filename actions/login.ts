@@ -10,7 +10,6 @@ import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail } from "@/lib/mail";
 import bcrypt from "bcryptjs";
 import { getVerificationTokenByEmail } from "@/data/verificationToken";
-import { error } from "console";
 
 export const login = async (formData: z.infer<typeof LoginSchema>) => {
   const validatedField = LoginSchema.safeParse(formData);
