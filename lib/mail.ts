@@ -4,17 +4,17 @@ const mailerSend = new MailerSend({
   apiKey: process.env.MAILSENDER_API_KEY!,
 });
 
-const sentFrom = new Sender(
-  "emailVerification@ifca.co.id",
-  "Email Verification - IFCA"
-);
-
 export const sendVerificationEmail = async (
   name: string,
   email: string,
   token: string
 ) => {
-  const confirmationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${token}&email=${email}`;
+  const sentFrom = new Sender(
+    "emailVerification@ifca.co.id",
+    "Email Verification - IFCA"
+  );
+
+  const confirmationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm-email?token=${token}&email=${email}`;
   const recipients = [new Recipient(email, name)];
   const emailParams = new EmailParams()
     .setFrom(sentFrom)
@@ -83,7 +83,7 @@ export const sendVerificationEmail = async (
           <h4>Hello ${name},</h4>
           <p>Verify this email address for your account by clicking the link below.</p>
           <p>If you did not request to verify an account, you can safely ignore this email.</p>
-          <a href="${confirmationUrl}" class="button">Verify Email Address Now</a>
+          <a href="${confirmationUrl}" class="button">Verify Email Address</a>
         </div>
         <div class="footer">
           <p>&copy; ${new Date().getFullYear()} IFCA Property365. All rights reserved.</p>
@@ -101,7 +101,11 @@ export const sendResetPasswordEmail = async (
   email: string,
   token: string
 ) => {
-  const confirmationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${token}&email=${email}`;
+  const sentFrom = new Sender(
+    "resetPasswordVerification@ifca.co.id",
+    "Reset Password - IFCA"
+  );
+  const confirmationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/new-password?token=${token}&email=${email}`;
   const recipients = [new Recipient(email, name)];
   const emailParams = new EmailParams()
     .setFrom(sentFrom)

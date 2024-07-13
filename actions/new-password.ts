@@ -9,9 +9,13 @@ import { getVerificationResetPasswordToken } from "@/data/resetPasswordToken";
 
 export const newPassword = async (
   data: z.infer<typeof NewPasswordSchema>,
-  email: string,
-  token: string
+  email?: string | null,
+  token?: string | null
 ) => {
+  if (!email || !token) {
+    return { error: "Missing token or email" };
+  }
+
   const validatedFields = NewPasswordSchema.safeParse(data);
   if (!validatedFields.success) {
     return { error: "Invalid fields" };
@@ -61,6 +65,15 @@ export const newPassword = async (
     await db.user.update({
       where: { id: existingUser.id },
       data: { password: hashedPassword },
+    });
+
+    await db.resetPasswordToken.delete({
+      where: {
+        token_email: {
+          token: resetPasswordToken.token,
+          email: resetPasswordToken.email,
+        },
+      },
     });
   } catch (error) {
     return { error: "Error updating password" };

@@ -12,7 +12,7 @@ export const NewPasswordSchema = z
       message: "Password must be at least 6 characters",
     }),
     confirmPassword: z.string().min(6, {
-      message: "Confirm password must be the same as password",
+      message: "Password must be at least 6 characters",
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {

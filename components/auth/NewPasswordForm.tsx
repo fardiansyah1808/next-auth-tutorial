@@ -53,8 +53,17 @@ const NewPasswordForm = () => {
         setError(value?.error || "");
         setSuccess(value?.success || "");
       });
+      form.reset();
     });
   };
+
+  if (!token || !email) {
+    return (
+      <div className="text-center text-4xl text-secondary mt-4">
+        You don&apos;t have access to this page
+      </div>
+    );
+  }
 
   return (
     <CardWrapper
